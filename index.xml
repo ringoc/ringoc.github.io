@@ -6,14 +6,23 @@
     <description>Recent content on Ringo Chan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 16 Jan 2021 11:53:51 +1100</lastBuildDate><atom:link href="http://chanwingfung.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 17 Jan 2021 12:08:54 +0000</lastBuildDate><atom:link href="http://chanwingfung.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title></title>
-      <link>http://chanwingfung.com/posts/my-2nd-post/</link>
-      <pubDate>Sat, 16 Jan 2021 11:53:51 +1100</pubDate>
+      <title>Blog</title>
+      <link>http://chanwingfung.com/projects/blog/</link>
+      <pubDate>Sun, 17 Jan 2021 12:08:54 +0000</pubDate>
       
-      <guid>http://chanwingfung.com/posts/my-2nd-post/</guid>
-      <description></description>
+      <guid>http://chanwingfung.com/projects/blog/</guid>
+      <description>Setup new blog </description>
+    </item>
+    
+    <item>
+      <title>New Year New Blog</title>
+      <link>http://chanwingfung.com/posts/new-year-new-blog/</link>
+      <pubDate>Sun, 17 Jan 2021 12:02:05 +0000</pubDate>
+      
+      <guid>http://chanwingfung.com/posts/new-year-new-blog/</guid>
+      <description>New Year New Blog </description>
     </item>
     
     <item>
@@ -35,19 +44,6 @@ test.. test&amp;hellip; test&amp;hellip;.. test?</description>
       <pubDate>Mon, 28 Dec 2020 12:24:02 +1100</pubDate>
       
       <guid>http://chanwingfung.com/about/</guid>
-      <description>Advertisement :)
- pica - high quality and fast image resize in browser. babelfish - developer friendly i18n with plurals support and easy syntax.  You will like those projects!
- h1 Heading 8-) h2 Heading h3 Heading h4 Heading h5 Heading h6 Heading Horizontal Rules    Typographic replacements Enable typographer option to see result.
-(c) (C) (r) (R) (tm) (TM) (p) (P) +-
-test.. test&amp;hellip; test&amp;hellip;.. test?</description>
-    </item>
-    
-    <item>
-      <title>Test</title>
-      <link>http://chanwingfung.com/posts/test/</link>
-      <pubDate>Mon, 28 Dec 2020 12:18:05 +1100</pubDate>
-      
-      <guid>http://chanwingfung.com/posts/test/</guid>
       <description>Advertisement :)
  pica - high quality and fast image resize in browser. babelfish - developer friendly i18n with plurals support and easy syntax.  You will like those projects!
  h1 Heading 8-) h2 Heading h3 Heading h4 Heading h5 Heading h6 Heading Horizontal Rules    Typographic replacements Enable typographer option to see result.

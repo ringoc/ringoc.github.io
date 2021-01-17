@@ -45,11 +45,9 @@ test.. test&amp;hellip; test&amp;hellip;.. test?</description>
       <pubDate>Mon, 28 Dec 2020 12:24:02 +1100</pubDate>
       
       <guid>http://ringoc.github.io/about/</guid>
-      <description>Advertisement :)
- pica - high quality and fast image resize in browser. babelfish - developer friendly i18n with plurals support and easy syntax.  You will like those projects!
- h1 Heading 8-) h2 Heading h3 Heading h4 Heading h5 Heading h6 Heading Horizontal Rules    Typographic replacements Enable typographer option to see result.
-(c) (C) (r) (R) (tm) (TM) (p) (P) +-
-test.. test&amp;hellip; test&amp;hellip;.. test?</description>
+      <description>Hello. My name is Ringo Chan. I am a software engineer focus on DevOps and cloud-native technology. Most of my work is open source and publicly available on GitHub. You can follow me on Twitter where I mostly tweet about my projects and DevOps technologies.
+If you happen to speak Chinese, my Chinese name is 陳詠鋒. You can also find me on 微博 and 知乎.
+Outside of programming and helping my wife take care of our 3 kids, I enjoy playing table tennis, swimming, bushwalking, karaoke and tinkering around my home.</description>
     </item>
     
   </channel>

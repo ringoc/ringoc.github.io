@@ -212,20 +212,20 @@
 </ol>
 <h2 id="step-1--retrieve-tfe-workspace-terraform-version">Step 1 — Retrieve TFE workspace Terraform version</h2>
 <p>As the Azure DevOps pipeline built-in Terraform task is always keep up to date, this may not match the Terraform Enterprise workspace version. It is the best to use the same version of Terraform between the runtime and workspace. To retrieve the <a href="https://www.terraform.io/docs/cloud/api/workspaces.html">Terraform workspace version</a>, we can fire up a CURL command in BASH with correct HTTP header. The return JSON will then selected by jq . e.g.</p>
-<pre><code>curl -sS --insecure \
-         --header &quot;Authorization: Bearer &lt;tfeToken&gt;&quot; \ 
-         --header &quot;Content-Type: application/vnd.api+json&quot; \    &quot;https://&lt;tfeHost&gt;/api/v2/organizations/&lt;tfeOrg&gt;/workspaces/&lt;tfeWorkspace&gt;&quot; 
-| jq -r '.data.attributes[&quot;terraform-version&quot;]'
-</code></pre>
-<p>We stored the version in the local variable and then pass it to the next step.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">curl -sS --insecure <span style="color:#0ff;font-weight:bold">\
+</span><span style="color:#0ff;font-weight:bold"></span>         --header <span style="color:#0ff;font-weight:bold">&#34;Authorization: Bearer &lt;tfeToken&gt;&#34;</span> <span style="color:#0ff;font-weight:bold">\ </span>
+         --header <span style="color:#0ff;font-weight:bold">&#34;Content-Type: application/vnd.api+json&#34;</span> <span style="color:#0ff;font-weight:bold">\ </span>   
+         <span style="color:#0ff;font-weight:bold">&#34;https://&lt;tfeHost&gt;/api/v2/organizations/&lt;tfeOrg&gt;/workspaces/&lt;tfeWorkspace&gt;&#34;</span> <span style="color:#0ff;font-weight:bold">\
+</span><span style="color:#0ff;font-weight:bold"></span>    | jq -r <span style="color:#0ff;font-weight:bold">&#39;.data.attributes[&#34;terraform-version&#34;]&#39;</span>
+
+</code></pre></div><p>We stored the version in the local variable and then pass it to the next step.</p>
 <h2 id="step-2--install-terraform-version-matching-workspace-version">Step 2 — Install Terraform version matching workspace version</h2>
 <p>Once the version is found, call a TerraformInstall task to install custom Terraform runtime.</p>
-<pre><code>**task**: TerraformInstaller@0     
-**displayName**: 'Install Terraform'     
-**inputs**:       
-  **terraformVersion**: &lt;tfVersion&gt;
-</code></pre>
-<h2 id="step-3--generate-terraform-cli-config-and-backend-config">Step 3 – Generate Terraform CLI config and backend config</h2>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="font-weight:bold">task</span>: TerraformInstaller@0     
+<span style="font-weight:bold">displayName</span>: <span style="color:#0ff;font-weight:bold">&#39;Install Terraform&#39;</span>     
+<span style="font-weight:bold">inputs</span>:       
+  <span style="font-weight:bold">terraformVersion</span>: &lt;tfVersion&gt;
+</code></pre></div><h2 id="step-3--generate-terraform-cli-config-and-backend-config">Step 3 – Generate Terraform CLI config and backend config</h2>
 <p>Since running Terraform remote backend, there are a few limitations:</p>
 <ul>
 <li>
@@ -237,46 +237,43 @@
 </ul>
 <p>We need to dynamically generate the CLI and backend config on the fly by replacing the TFE host, organization, workspace prefix in the backend config. and TFE host and token in the CLI config.</p>
 <p><em>.config/backend.hcl</em></p>
-<pre><code>hostname     = &quot;__ptfeHost__&quot;
-organization = &quot;__ptfeOrg__&quot;
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">hostname     = &#34;__ptfeHost__&#34;
+organization = &#34;__ptfeOrg__&#34;
 workspaces  {
-  prefix = &quot;__tla__-&quot;
+  prefix = &#34;__tla__-&#34;
 }
-</code></pre>
-<p><em>.config/credentials.tfrc.json</em></p>
-<pre><code>{
-  &quot;credentials&quot;: {
-    &quot;__ptfeHost__&quot;: {
-      &quot;token&quot;: &quot;__ptfeToken__&quot;
+</code></pre></div><p><em>.config/credentials.tfrc.json</em></p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">{
+  <span style="font-weight:bold">&#34;credentials&#34;: </span>{
+    <span style="font-weight:bold">&#34;__ptfeHost__&#34;: </span>{
+      <span style="font-weight:bold">&#34;token&#34;: </span><span style="color:#0ff;font-weight:bold">&#34;__ptfeToken__&#34;</span>
     }
   }
 }
-</code></pre>
-<p><em>azure-pipeline.yaml</em></p>
-<pre><code>**bash**: |       
+</code></pre></div><p><em>azure-pipeline.yaml</em></p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="font-weight:bold">bash</span>: |       
   cp ./tf/env/&lt;env&gt;.auto.tfvars ./tf    
-  sed -i 's/__tfeHost__/&lt;tfeHost&gt;/' ./tf/.config/backend.hcl       
-  sed -i 's/__tfeOrg__/&lt;tfeOrg&gt;/' ./tf/.config/backend.hcl       
-  sed -i 's/__tfeWorkspace__/&lt;tfeWorkspace&gt;/' ./tf/.config/backend.hcl       
-  sed -i 's/__tfeHost__/&lt;tfeHost&gt;/' ./tf/.config/credentials.tfrc.json         
-  sed -i 's/__tfeToken__/&lt;tfeToken&gt;/'            ./tf/.config/credentials.tfrc.json     
-**displayName**: 'Create TF CLI Config File'     
-**env**:       
-  **TFE_TOKEN**: &lt;tfToken&gt; *# passed as secret variables*
-</code></pre>
-<h2 id="step-4--terraform-init-with-backend-config">Step 4 – Terraform init with backend config</h2>
+  sed -i &#39;s/__tfeHost__/&lt;tfeHost&gt;/&#39; ./tf/.config/backend.hcl       
+  sed -i &#39;s/__tfeOrg__/&lt;tfeOrg&gt;/&#39; ./tf/.config/backend.hcl       
+  sed -i &#39;s/__tfeWorkspace__/&lt;tfeWorkspace&gt;/&#39; ./tf/.config/backend.hcl       
+  sed -i &#39;s/__tfeHost__/&lt;tfeHost&gt;/&#39; ./tf/.config/credentials.tfrc.json         
+  sed -i &#39;s/__tfeToken__/&lt;tfeToken&gt;/&#39;            ./tf/.config/credentials.tfrc.json     
+<span style="font-weight:bold">displayName</span>: <span style="color:#0ff;font-weight:bold">&#39;Create TF CLI Config File&#39;</span>     
+<span style="font-weight:bold">env</span>:       
+  <span style="font-weight:bold">TFE_TOKEN</span>: &lt;tfToken&gt; <span style="color:#007f7f"># passed as secret variables</span>
+</code></pre></div><h2 id="step-4--terraform-init-with-backend-config">Step 4 – Terraform init with backend config</h2>
 <p>Once CLI and backend config is generated. Run terraform init with custom backend config, and a couple of runtime variables.</p>
-<pre><code>bash: |       
-  DIRECTORY=&quot;./tf&quot;       
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="font-weight:bold">bash</span>: |       
+  DIRECTORY=&#34;./tf&#34;       
   cd $DIRECTORY       
   TF_WORKSPACE=&lt;tfeWorkspace&gt; \
   TF_CLI_CONFIG_FILE=.config/credentials.tfrc.json \
-  terraform init -backend-config=.config/backend.hcl     displayName: 'TFE Init'\
-</code></pre>
-<h2 id="step-5--terraform-apply-with-correct-cli-and-backend-config">Step 5 – Terraform apply with correct CLI and backend config</h2>
+  terraform init -backend-config=.config/backend.hcl     
+<span style="font-weight:bold">displayName</span>: <span style="color:#0ff;font-weight:bold">&#39;TFE Init&#39;</span>\
+</code></pre></div><h2 id="step-5--terraform-apply-with-correct-cli-and-backend-config">Step 5 – Terraform apply with correct CLI and backend config</h2>
 <p>Same for applying the terraform</p>
-<pre><code>bash: |       
-  DIRECTORY=&quot;./tf&quot;       
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="font-weight:bold">bash</span>: |       
+  DIRECTORY=&#34;./tf&#34;       
   cd $DIRECTORY       
   TF_WORKSPACE=&lt;tfeWorkspace&gt; \    
   TF_CLI_CONFIG_FILE=.config/credentials.tfrc.json \
@@ -284,31 +281,28 @@ workspaces  {
   TF_WORKSPACE=&lt;tfeWorkspace&gt; \
   TF_CLI_CONFIG_FILE=./.config/credentials.tfrc.json \
   terraform show -json &gt; output-state.json       
-  cat output-state.json | jq '.' | less     
-displayName: 'TFE Apply'
-</code></pre>
-<h2 id="step-6--archive-the-plan-as-an-artifact">Step 6 – Archive the plan as an artifact</h2>
+  cat output-state.json | jq &#39;.&#39; | less     
+<span style="font-weight:bold">displayName</span>: <span style="color:#0ff;font-weight:bold">&#39;TFE Apply&#39;</span>
+</code></pre></div><h2 id="step-6--archive-the-plan-as-an-artifact">Step 6 – Archive the plan as an artifact</h2>
 <p>As a requirement for change management, the plan/apply output are exported and packaged up as a GZIP file.</p>
-<pre><code>task: ArchiveFiles@2     
-  inputs:       
-    rootFolderOrFile: '$(Build.SourcesDirectory)'            
-    includeRootFolder: false       
-    archiveType: 'tar'       
-    tarCompression: 'gz'       
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tfplan.tgz'       
-    replaceExistingArchive: true       
-displayName: 'Create Plan Artifact'
-</code></pre>
-<h2 id="step-7--publish-to-the-artifact-container">Step 7 – Publish to the artifact container</h2>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="font-weight:bold">task</span>: ArchiveFiles@2     
+  <span style="font-weight:bold">inputs</span>:       
+    <span style="font-weight:bold">rootFolderOrFile</span>: <span style="color:#0ff;font-weight:bold">&#39;$(Build.SourcesDirectory)&#39;</span>            
+    <span style="font-weight:bold">includeRootFolder</span>: <span style="color:#fff;font-weight:bold">false</span>       
+    <span style="font-weight:bold">archiveType</span>: <span style="color:#0ff;font-weight:bold">&#39;tar&#39;</span>       
+    <span style="font-weight:bold">tarCompression</span>: <span style="color:#0ff;font-weight:bold">&#39;gz&#39;</span>       
+    <span style="font-weight:bold">archiveFile</span>: <span style="color:#0ff;font-weight:bold">&#39;$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tfplan.tgz&#39;</span>       
+    <span style="font-weight:bold">replaceExistingArchive</span>: <span style="color:#fff;font-weight:bold">true</span>       
+<span style="font-weight:bold">displayName</span>: <span style="color:#0ff;font-weight:bold">&#39;Create Plan Artifact&#39;</span>
+</code></pre></div><h2 id="step-7--publish-to-the-artifact-container">Step 7 – Publish to the artifact container</h2>
 <p>Once the GZIP is created, publish to Azure DevOps artifact</p>
-<pre><code>task: PublishBuildArtifacts@1     
-  inputs:       
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'       
-    ArtifactName: '$(Build.BuildId).tf.enterprise.plan'           
-    publishLocation: 'Container'       
-displayName: 'Publish Plan Artifact'
-</code></pre>
-<h2 id="summary">Summary</h2>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="font-weight:bold">task</span>: PublishBuildArtifacts@1     
+  <span style="font-weight:bold">inputs</span>:       
+    <span style="font-weight:bold">PathtoPublish</span>: <span style="color:#0ff;font-weight:bold">&#39;$(Build.ArtifactStagingDirectory)&#39;</span>       
+    <span style="font-weight:bold">ArtifactName</span>: <span style="color:#0ff;font-weight:bold">&#39;$(Build.BuildId).tf.enterprise.plan&#39;</span>           
+    <span style="font-weight:bold">publishLocation</span>: <span style="color:#0ff;font-weight:bold">&#39;Container&#39;</span>       
+<span style="font-weight:bold">displayName</span>: <span style="color:#0ff;font-weight:bold">&#39;Publish Plan Artifact&#39;</span>
+</code></pre></div><h2 id="summary">Summary</h2>
 <p>Now if you run the pipeline, it should go through tall the above steps. And the TFE workspace should be triggered by the pipeline task. However the workflow is infrastructure lead will review the plan in TFE workspace and confirm the plan by clicking on the Confirm button. Also, any change management can be referenced by TFE workspace history and the Azure artifact stored in Azure Pipeline.</p>
 
       </div>

@@ -17,7 +17,7 @@
     <meta property="og:title" content="Run Terraform with remote TFE backend in Azure DevOps Pipeline" />
 <meta property="og:description" content="Run Terraform with remote TFE backend in Azure DevOps Pipeline" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://ringoc.github.io/posts/run-terraform-with-remote-tfe-backend-in-azure-devops-pipeline/" />
+<meta property="og:url" content="http://ringoc.github.io/posts/terraform-with-remote-tfe-backend-in-azure-devops-pipeline/" />
 <meta property="article:published_time" content="2021-01-20T21:25:59+11:00" />
 <meta property="article:modified_time" content="2021-01-20T21:25:59+11:00" />
 
@@ -27,7 +27,7 @@
 </title>
 
     
-      <link rel="canonical" href="http://ringoc.github.io/posts/run-terraform-with-remote-tfe-backend-in-azure-devops-pipeline/">
+      <link rel="canonical" href="http://ringoc.github.io/posts/terraform-with-remote-tfe-backend-in-azure-devops-pipeline/">
     
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -237,16 +237,16 @@
 </ul>
 <p>We need to dynamically generate the CLI and backend config on the fly by replacing the TFE host, organization, workspace prefix in the backend config. and TFE host and token in the CLI config.</p>
 <p><em>.config/backend.hcl</em></p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">hostname     = &#34;__ptfeHost__&#34;
-organization = &#34;__ptfeOrg__&#34;
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">hostname     = &#34;__tfeHost__&#34;
+organization = &#34;__tfeOrg__&#34;
 workspaces  {
   prefix = &#34;__tla__-&#34;
 }
 </code></pre></div><p><em>.config/credentials.tfrc.json</em></p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">{
   <span style="font-weight:bold">&#34;credentials&#34;: </span>{
-    <span style="font-weight:bold">&#34;__ptfeHost__&#34;: </span>{
-      <span style="font-weight:bold">&#34;token&#34;: </span><span style="color:#0ff;font-weight:bold">&#34;__ptfeToken__&#34;</span>
+    <span style="font-weight:bold">&#34;__tfeHost__&#34;: </span>{
+      <span style="font-weight:bold">&#34;token&#34;: </span><span style="color:#0ff;font-weight:bold">&#34;__tfeToken__&#34;</span>
     }
   }
 }

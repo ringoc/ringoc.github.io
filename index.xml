@@ -9,10 +9,10 @@
     <lastBuildDate>Wed, 20 Jan 2021 21:25:59 +1100</lastBuildDate><atom:link href="http://ringoc.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Run Terraform with remote TFE backend in Azure DevOps Pipeline</title>
-      <link>http://ringoc.github.io/posts/run-terraform-with-remote-tfe-backend-in-azure-devops-pipeline/</link>
+      <link>http://ringoc.github.io/posts/terraform-with-remote-tfe-backend-in-azure-devops-pipeline/</link>
       <pubDate>Wed, 20 Jan 2021 21:25:59 +1100</pubDate>
       
-      <guid>http://ringoc.github.io/posts/run-terraform-with-remote-tfe-backend-in-azure-devops-pipeline/</guid>
+      <guid>http://ringoc.github.io/posts/terraform-with-remote-tfe-backend-in-azure-devops-pipeline/</guid>
       <description>Run Terraform with remote TFE backend in Azure DevOps Pipeline Background Recently I worked in a project in large enterprise cloud migration project which using Azure DevOps Pipeline (YAML) as the core CD/CI pipeline which integrate Github repository as the source of truth, Terraform Enterprise workspace performing the IaC workload and Azure AD for IAM.
 There are a number of benefits:
   Cloud-native approach with Terraform with massive number of providers</description>
@@ -43,7 +43,7 @@ Not only I can work much more productive, but also have chance to take a pause t
       <pubDate>Mon, 28 Dec 2020 12:24:02 +1100</pubDate>
       
       <guid>http://ringoc.github.io/about/</guid>
-      <description>Hello. My name is Ringo Chan. I am a software engineer focus on DevOps and cloud-native technology. Most of my work is open source and publicly available on GitHub. You can follow me on Twitter where I mostly tweet about my projects and DevOps technologies.
+      <description>Hello ! My name is Ringo Chan. I am a software engineer focus on DevOps and cloud-native technology. Most of my work is open source and publicly available on GitHub. You can follow me on Twitter where I mostly tweet about my projects and DevOps technologies.
 If you happen to speak Chinese, my Chinese name is 陳詠鋒. You can also find me on 微博 and 知乎.
 Outside of programming and helping my wife take care of our 3 kids, I enjoy playing table tennis, swimming, bushwalking, karaoke and tinkering around my home.</description>
     </item>
